@@ -52,12 +52,16 @@ const instance = axios.create({
  */
 instance.interceptors.request.use(
   config => {
+    // 防止post请求参数无法传到后台
     if (config.method === 'post') {
       config.data = qs.stringify(config.data)
     }
-    // if(store.state.login.user.token){
-    //     config.headers.authorization = store.state.login.user.token
-    // }
+    // 为请求头对象添加token验证的authorization
+    if (store.state.login.user.token) {
+      // config.headers.authorization = store.state.login.user.token
+      config.headers.authorization = localStorage.getItem('csn')
+    }
+    // console.log(config)
     return config
   },
   error => Promise.reject(error)

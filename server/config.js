@@ -4,7 +4,7 @@ const client = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: '2021ego'
+  database: 'csn'
 })
 
 const sqlClient = (sql, arr, callback) => {

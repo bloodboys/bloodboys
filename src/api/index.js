@@ -29,10 +29,10 @@ const api = {
     return axios.get(base.baseUrl + base.total)
   },
   /**
-     * 模糊查询
+     * 用户信息查询
      */
-  search (params) {
-    return axios.get(base.baseUrl + base.search, {
+  usersearch (params) {
+    return axios.get(base.baseUrl + base.userSearch, {
       params
     })
   },
@@ -45,34 +45,34 @@ const api = {
     })
   },
   /**
-     * 商品添加
+     * 添加用户
      */
-  insertTbItem (params) {
-    return axios.get(base.baseUrl + base.insertTbItem, {
+  adduser (params) {
+    return axios.get(base.baseUrl + base.adduser, {
       params
     })
   },
   /**
      * 商品删除
      */
-  deleteItemById (params) {
-    return axios.get(base.baseUrl + base.deleteItemById, {
+  deleteUserById (params) {
+    return axios.get(base.baseUrl + base.deleteUserById, {
       params
     })
   },
   /**
      * 预更新
      */
-  preUpdateItem (params) {
-    return axios.get(base.baseUrl + base.preUpdateItem, {
+  preUpdateUser (params) {
+    return axios.get(base.baseUrl + base.preUpdateUser, {
       params
     })
   },
   /**
      * 商品修改
      */
-  updateTbItem (params) {
-    return axios.get(base.baseUrl + base.updateTbItem, {
+  updateUser (params) {
+    return axios.get(base.baseUrl + base.updateUser, {
       params
     })
   },
@@ -91,7 +91,34 @@ const api = {
     return axios.get(base.baseUrl + base.paramsSearch, {
       params
     })
+  },
+  /**
+     * 左侧菜单权限
+     */
+  menus (params) {
+    return axios.get(base.baseUrl + base.menus, {
+      params
+    })
+  },
+
+  /**
+     * 用户列表
+     */
+  users (params) {
+    return axios.get(base.baseUrl + base.users, {
+      params
+    })
+  },
+
+  /**
+       * 用户状态修改
+       */
+  updateuserstate (params) {
+    return axios.get(base.baseUrl + base.updateuserstate, {
+      params
+    })
   }
+
 }
 
 export default api
