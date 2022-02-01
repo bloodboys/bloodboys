@@ -95,7 +95,7 @@ export default {
               this.$message.success('登陆成功')
               this.$router.push('/home')
             } else {
-              this.$message.success('登陆失败')
+              this.$message.error('登陆失败')
             }
           })
         }

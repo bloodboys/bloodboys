@@ -3,38 +3,8 @@ const router = express.Router()
 const sqlClient = require('./config')
 const jwt = require('jsonwebtoken')
 const url = require('url')
-const fs = require('fs')
-const multer = require('multer')
 
-/**
- * 注册
- */
-router.post('/register', (req, res) => {
-  const {
-    username,
-    password,
-    email
-  } = req.body
-  const sql = 'insert into user values(null,?,?,?)'
-  const arr = [username, password, email]
-  sqlClient(sql, arr, result => {
-    if (result.affectedRows > 0) {
-      res.send({
-        status: 200,
-        msg: '注册成功'
-      })
-    } else {
-      res.send({
-        status: 401,
-        msg: '注册失败'
-      })
-    }
-  })
-})
-
-/**
- * 登陆
- */
+// 登录
 router.post('/login', (req, res) => {
   const {
     username,
@@ -62,17 +32,52 @@ router.post('/login', (req, res) => {
   })
 })
 
-/**
- * 后面要联调
- */
+//  用户信息查询
 
-/**
- * 商品查询
- */
-router.get('/backend/item/selectTbItemAllByPage', (req, res) => {
-  // 分页
-  const page = url.parse(req.url, true).query.page || 1
-  const sql = 'select * from project order by id desc limit 10 offset ' + (page - 1) * 10
+router.get('/usersearch', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const search = a.searchParams.get('search')
+  const sql = "select * from user where concat(`username`,`mobile`,`email`,`mg_state`,`role_name`) like '%" +
+        search + "%'"
+  sqlClient(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '暂无数据'
+      })
+    }
+  })
+})
+
+// 左侧菜单权限
+router.get('/menus', (req, res) => {
+  const sql = 'select * from menus where id'
+  sqlClient(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+
+      })
+    } else {
+      res.send({
+        status: 401,
+        msg: '获取菜单失败'
+
+      })
+    }
+  })
+})
+
+// 用户列表
+router.get('/users', (req, res) => {
+  const sql = 'select * from user where id '
   sqlClient(sql, null, result => {
     if (result.length > 0) {
       res.send({
@@ -82,170 +87,67 @@ router.get('/backend/item/selectTbItemAllByPage', (req, res) => {
     } else {
       res.send({
         status: 401,
-        msg: '暂无数据'
+        msg: '获取用户列表失败'
       })
     }
   })
 })
 
-/**
- * 商品总条数
- */
-router.get('/total', (req, res) => {
-  const sql = 'select count(*) from project where id'
-  sqlClient(sql, null, result => {
-    if (result.length > 0) {
-      res.send({
-        status: 200,
-        result
-      })
-    } else {
-      res.send({
-        status: 500,
-        msg: '暂无更多数据'
-      })
-    }
-  })
-})
+// 用户状态修改
+router.get('/users/uId/state/type', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const id = a.searchParams.get('id')
+  const mgstate = a.searchParams.get('mg_state')
+  const sql = 'update user set mg_state=? where id=?'
+  const arr = [mgstate, id]
 
-/**
- * 模糊查询
- */
-router.get('/search', (req, res) => {
-  const search = url.parse(req.url, true).query.search
-  const sql = "select * from project where concat(`title`,`sellPoint`,`descs`) like '%" + search + "%'"
-  sqlClient(sql, null, result => {
-    if (result.length > 0) {
-      res.send({
-        status: 200,
-        result
-      })
-    } else {
-      res.send({
-        status: 500,
-        msg: '暂无数据'
-      })
-    }
-  })
-})
-
-/**
- * 类目选择
- */
-router.get('/backend/itemCategory/selectItemCategoryByParentId', (req, res) => {
-  const id = url.parse(req.url, true).query.id || 1
-  const sql = 'select * from category where id=?'
-  const arr = [id]
-  sqlClient(sql, arr, result => {
-    if (result.length > 0) {
-      res.send({
-        status: 200,
-        result
-      })
-    } else {
-      res.send({
-        status: 500,
-        msg: '暂无数据'
-      })
-    }
-  })
-})
-
-/**
- * 上传图片
- */
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './upload/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname)
-  }
-})
-
-var createFolder = function (folder) {
-  try {
-    fs.accessSync(folder)
-  } catch (e) {
-    fs.mkdirSync(folder)
-  }
-}
-
-var uploadFolder = './upload/'
-createFolder(uploadFolder)
-var upload = multer({
-  storage: storage
-})
-
-router.post('/upload', upload.single('file'), function (req, res, next) {
-  var file = req.file
-  console.log('文件类型：%s', file.mimetype)
-  console.log('原始文件名：%s', file.originalname)
-  console.log('文件大小：%s', file.size)
-  console.log('文件保存路径：%s', file.path)
-  res.json({
-    res_code: '0',
-    name: file.originalname,
-    url: file.path
-  })
-})
-
-/**
- * 添加商品
- */
-router.get('/backend/item/insertTbItem', (req, res) => {
-  const cid = url.parse(req.url, true).query.cid || ''
-  const title = url.parse(req.url, true).query.title || ''
-  const sellPoint = url.parse(req.url, true).query.sellPoint || ''
-  const price = url.parse(req.url, true).query.price || ''
-  const num = url.parse(req.url, true).query.num || ''
-  const image = url.parse(req.url, true).query.image || ''
-  const desc = url.parse(req.url, true).query.desc || ''
-  const sql = "insert into project values (null,?,?,?,?,?,?,'',1,'','',?)"
-  const arr = [title, image, sellPoint, price, cid, num, desc]
   sqlClient(sql, arr, result => {
     if (result.affectedRows > 0) {
       res.send({
         status: 200,
-        msg: '添加成功'
+        msg: '修改用户状态成功'
+
       })
     } else {
       res.send({
         status: 500,
-        msg: '添加失败'
+        msg: '修改用户状态失败'
       })
     }
   })
 })
 
-/**
- * 商品删除
- */
-router.get('/backend/item/deleteItemById', (req, res) => {
-  const id = url.parse(req.url, true).query.id
-  const sql = 'delete from project where id=?'
-  const arr = [id]
+// 添加用户
+router.get('/adduser', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const id = a.searchParams.get('id')
+  const rid = a.searchParams.get('rid')
+  const username = a.searchParams.get('username')
+  const password = a.searchParams.get('password')
+  const mobile = a.searchParams.get('mobile')
+  const email = a.searchParams.get('email')
+  const sql = 'insert into user values (?,?,?,?,?,?,0,"普通用户")'
+  const arr = [id, rid, username, password, mobile, email]
   sqlClient(sql, arr, result => {
     if (result.affectedRows > 0) {
       res.send({
         status: 200,
-        msg: '删除成功'
+        msg: '添加用户成功'
       })
     } else {
       res.send({
         status: 500,
-        msg: '删除失败'
+        msg: '添加用户失败'
       })
     }
   })
 })
 
-/**
- * 预更新
- */
-router.get('/backend/item/preUpdateItem', (req, res) => {
-  const id = url.parse(req.url, true).query.id
-  const sql = 'select * from project where id=?'
+// 用户编辑预更新
+router.get('/preUpdateUser', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const id = a.searchParams.get('id')
+  const sql = 'select * from user where id=?'
   sqlClient(sql, [id], result => {
     if (result.length > 0) {
       res.send({
@@ -261,75 +163,47 @@ router.get('/backend/item/preUpdateItem', (req, res) => {
   })
 })
 
-/**
- * 商品编辑
- */
-router.get('/backend/item/updateTbItem', (req, res) => {
-  const id = url.parse(req.url, true).query.id
-  const cid = url.parse(req.url, true).query.cid || ''
-  const title = url.parse(req.url, true).query.title || ''
-  const sellPoint = url.parse(req.url, true).query.sellPoint || ''
-  const price = url.parse(req.url, true).query.price || ''
-  const num = url.parse(req.url, true).query.num || ''
-  const image = url.parse(req.url, true).query.image || ''
-  const desc = url.parse(req.url, true).query.desc || ''
-  const sql = 'update project set title=?,sellPoint=?,cid=?,price=?,num=?,descs=?,image=? where id=?'
-  const arr = [title, sellPoint, cid, price, num, desc, image, id]
+// 用户编辑
+router.get('/updateUser', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const id = a.searchParams.get('id')
+  const email = a.searchParams.get('email')
+  const mobile = a.searchParams.get('mobile')
+  const sql = 'update user set email=?,mobile=? where id=?'
+  const arr = [email, mobile, id]
   sqlClient(sql, arr, result => {
     if (result.affectedRows > 0) {
       res.send({
         status: 200,
-        msg: '修改成功'
+        msg: '用户修改成功'
       })
     } else {
       res.send({
         status: 500,
-        msg: '修改失败'
+        msg: '用户修改失败'
       })
     }
   })
 })
 
-/**
- * 规格参数查询
- */
-router.get('/backend/itemParam/selectItemParamAll', (req, res) => {
-  const page = url.parse(req.url, true).query.page || 1
-  const sql = 'select * from params order by id desc limit 10 offset ' + (page - 1) * 10
-  sqlClient(sql, null, result => {
-    if (result.length > 0) {
+// 用户删除
+router.get('/deleteUserById', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const id = a.searchParams.get('id')
+  const sql = 'delete from user where id=?'
+  const arr = [id]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
       res.send({
         status: 200,
-        result
+        msg: '删除用户成功'
       })
     } else {
       res.send({
         status: 500,
-        msg: '查询失败'
+        msg: '删除用户失败'
       })
     }
   })
 })
-
-/**
- * 规格参数模糊查询
- */
-router.get('/params/search', (req, res) => {
-  const search = url.parse(req.url, true).query.search
-  const sql = "select * from params where concat(`paramData`) like '%" + search + "%'"
-  sqlClient(sql, null, result => {
-    if (result.length > 0) {
-      res.send({
-        status: 200,
-        result
-      })
-    } else {
-      res.send({
-        status: 500,
-        msg: '暂无数据'
-      })
-    }
-  })
-})
-
 module.exports = router

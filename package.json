@@ -4,7 +4,8 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build"
+        "build": "vue-cli-service build",
+        "dev": "concurrently \"npm run serve\" \"nodemon server/index.js\""
     },
     "dependencies": {
         "axios": "^0.25.0",
