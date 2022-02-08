@@ -15,10 +15,10 @@ const api = {
     return axios.post(base.baseUrl + base.login, params)
   },
   /**
-     * 商品列表
+     * 权限列表
      */
-  selectTbItemAllByPage (params) {
-    return axios.get(base.baseUrl + base.selectTbItemAllByPage, {
+  rights (params) {
+    return axios.get(base.baseUrl + base.rights, {
       params
     })
   },
@@ -61,7 +61,7 @@ const api = {
     })
   },
   /**
-     * 预更新
+     * 用户预更新
      */
   preUpdateUser (params) {
     return axios.get(base.baseUrl + base.preUpdateUser, {
@@ -69,7 +69,7 @@ const api = {
     })
   },
   /**
-     * 商品修改
+     * 用户修改
      */
   updateUser (params) {
     return axios.get(base.baseUrl + base.updateUser, {
@@ -77,10 +77,10 @@ const api = {
     })
   },
   /**
-     * 规格参数查询
+     * 角色列表
      */
-  selectItemParamAll (params) {
-    return axios.get(base.baseUrl + base.selectItemParamAll, {
+  roles (params) {
+    return axios.get(base.baseUrl + base.roles, {
       params
     })
   },
@@ -117,8 +117,72 @@ const api = {
     return axios.get(base.baseUrl + base.updateuserstate, {
       params
     })
-  }
+  },
+  /**
+     * 角色权限删除
+     */
+  deleteRightById (params) {
+    return axios.get(base.baseUrl + base.deleteRightById, {
+      params
+    })
+  },
+  /**
+     * 返回角色权限
+     */
+  returnRightById (params) {
+    return axios.get(base.baseUrl + base.returnRightById, {
+      params
+    })
+  },
 
+  /**
+     * 获取所有权限列表
+     */
+  allRightById (params) {
+    return axios.get(base.baseUrl + base.allRightById, {
+      params
+    })
+  },
+  /**
+     * 用户角色对应id查找
+     */
+  UserRoleById (params) {
+    return axios.get(base.baseUrl + base.UserRoleById, {
+      params
+    })
+  },
+  /**
+     * 添加角色
+     */
+  addrole (params) {
+    return axios.get(base.baseUrl + base.addrole, {
+      params
+    })
+  },
+  /**
+     * 角色预更新
+     */
+  preUpdateUserRole (params) {
+    return axios.get(base.baseUrl + base.preUpdateUserRole, {
+      params
+    })
+  },
+  /**
+     * 角色修改
+     */
+  updateUserRole (params) {
+    return axios.get(base.baseUrl + base.updateUserRole, {
+      params
+    })
+  },
+  /**
+     * 角色删除
+     */
+  deleteRoleById (params) {
+    return axios.get(base.baseUrl + base.deleteRoleById, {
+      params
+    })
+  }
 }
 
 export default api

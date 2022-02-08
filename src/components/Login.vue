@@ -92,10 +92,10 @@ export default {
                 JSON.stringify(res.data)
               )
               // console.log(this.setUser(res.data.token))
-              this.$message.success('登陆成功')
+              this.$message.success('登录成功')
               this.$router.push('/home')
             } else {
-              this.$message.error('登陆失败')
+              this.$message.error('登录失败')
             }
           })
         }
