@@ -7,6 +7,7 @@ import './assets/css/global.css'
 import './utils/init'
 import './router/permission'
 import api from './api'
+import 'default-passive-events'
 Vue.prototype.$api = api
 Vue.config.productionTip = false
 
