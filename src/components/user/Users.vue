@@ -268,15 +268,13 @@ export default {
     },
     // 监听pagesize改变的事件
     handleSizeChange (newSize) {
-      // console.log(newSize)
       this.queryInfo.pagesize = newSize
       this.getUserList()
     },
     // 监听页码值改变的事件
     handleCurrentChange (newSize) {
-      // console.log(newSize)
       this.queryInfo.pagenum = newSize
-      // this.getUserList()
+      this.getUserList()
     },
     // 监听switch开关状态的改变
     userStateChanged (userinfo) {

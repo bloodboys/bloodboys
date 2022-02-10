@@ -387,7 +387,6 @@ export default {
           x = x.filter(ite => ite.id !== this.rightslist[i].id)
         }
       }
-      console.log(this.roleId)
       // 第二权限筛选
       for (let i = 0; i < x.length; i++) {
         for (let j = 0; j < x[i].children.length; j++) {
@@ -411,7 +410,6 @@ export default {
       for (let i = 0; i < c.length; i++) {
         x.map(item => { item.children.map(ite => { const list = ite.children.filter(it => it.id !== c[i]); ite.children = list }) })
       }
-      console.log(x)
       // 分配权限接口
       this.$api.deleteRightById({
         id: this.roleId,

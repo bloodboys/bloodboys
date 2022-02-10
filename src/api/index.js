@@ -182,6 +182,46 @@ const api = {
     return axios.get(base.baseUrl + base.deleteRoleById, {
       params
     })
+  },
+  /**
+     * 菜品分类数据列表
+     */
+  foodscate (params) {
+    return axios.get(base.baseUrl + base.foodscate, {
+      params
+    })
+  },
+  /**
+     * 添加菜品分类
+     */
+  addfoodscate (params) {
+    return axios.get(base.baseUrl + base.addfoodscate, {
+      params
+    })
+  },
+  /**
+     * 编辑菜品分类预更新
+     */
+  preUpdateCate (params) {
+    return axios.get(base.baseUrl + base.preUpdateCate, {
+      params
+    })
+  },
+  /**
+     * 菜品分类名修改
+     */
+  updateCate (params) {
+    return axios.get(base.baseUrl + base.updateCate, {
+      params
+    })
+  },
+  /**
+     * 菜品分类删除
+     */
+  deleteCateById (params) {
+    return axios.get(base.baseUrl + base.deleteCateById, {
+      params
+    })
   }
 }
 
