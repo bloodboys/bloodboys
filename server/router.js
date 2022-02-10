@@ -415,4 +415,105 @@ router.get('/deleteRoleById', (req, res) => {
     }
   })
 })
+
+// 菜品分类列表
+router.get('/foodscate', (req, res) => {
+  const sql = 'select * from foodscate where id '
+  sqlClient(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+      })
+    } else {
+      res.send({
+        status: 401,
+        msg: '获取菜品分类列表失败'
+      })
+    }
+  })
+})
+
+// 添加菜品分类
+router.get('/addfoodscate', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const children = a.searchParams.get('children')
+  const sql = 'update foodscate set children=? where id=?'
+  const arr = [children, 1]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: '菜品分类添加成功'
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '菜品分类添加失败'
+      })
+    }
+  })
+})
+
+// 菜品分类编辑预更新
+router.get('/preUpdateCate', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const id = a.searchParams.get('id')
+  const sql = 'select children from foodscate where id'
+  sqlClient(sql, [id], result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '角色预更新失败'
+      })
+    }
+  })
+})
+
+// 菜品分类名修改
+router.get('/updateCate', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const children = a.searchParams.get('children')
+  const sql = 'update foodscate set children=? where id=?'
+  const arr = [children, 1]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: '菜品分类名修改成功'
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '菜品分类名修改失败'
+      })
+    }
+  })
+})
+
+// 菜品分类删除
+router.get('/deleteCateById', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const children = a.searchParams.get('children')
+  const sql = 'update foodscate set children=? where id=?'
+  const arr = [children, 1]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: '菜品分类删除成功'
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '菜品分类删除失败'
+      })
+    }
+  })
+})
 module.exports = router

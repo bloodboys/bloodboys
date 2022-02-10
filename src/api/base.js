@@ -22,7 +22,12 @@ const base = {
   addrole: '/api/addrole', // 添加角色
   preUpdateUserRole: '/api/preUpdateUserRole', // 角色预更新
   updateUserRole: '/api/updateUserRole', // 角色修改
-  deleteRoleById: '/api/deleteRoleById' // 角色删除
+  deleteRoleById: '/api/deleteRoleById', // 角色删除
+  foodscate: '/api/foodscate', // 菜品分类数据列表
+  addfoodscate: '/api/addfoodscate', // 添加菜品分类
+  preUpdateCate: '/api/preUpdateCate', // 编辑菜品分类预更新
+  updateCate: '/api/updateCate', // 菜品分类名修改
+  deleteCateById: '/api/deleteCateById' // 菜品分类删除
 }
 
 export default base
