@@ -516,4 +516,112 @@ router.get('/deleteCateById', (req, res) => {
     }
   })
 })
+
+// 获取参数列表
+router.get('/cateparams', (req, res) => {
+  const sql = 'select * from cateparams where attr_id'
+  sqlClient(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        msg: '获取所有参数列表成功',
+        result
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '获取所有参数列表失败'
+      })
+    }
+  })
+})
+
+// 添加分类参数
+router.get('/addcateparams', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const catid = a.searchParams.get('cat_id')
+  const attrname = a.searchParams.get('attr_name')
+  const attrsel = a.searchParams.get('attr_sel')
+  const sql = 'insert into cateparams values (null,?,?,?,null,null)'
+  const arr = [attrname, catid, attrsel]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: '添加分类参数成功'
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '添加分类参数失败'
+      })
+    }
+  })
+})
+
+// 分类参数编辑预更新
+router.get('/preUpdateParams', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const attrid = a.searchParams.get('attr_id')
+  const catid = a.searchParams.get('cat_id')
+  const sql = 'select * from cateparams where attr_id=? and cat_id=?'
+  sqlClient(sql, [attrid, catid], result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '分类参数预更新失败'
+      })
+    }
+  })
+})
+
+// 分类参数修改
+router.get('/updateParams', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const attrid = a.searchParams.get('attr_id')
+  const catid = a.searchParams.get('cat_id')
+  const attrname = a.searchParams.get('attr_name')
+  const attrvals = a.searchParams.get('attr_vals')
+  const sql = 'update cateparams set attr_name=?,attr_vals=? where attr_id=? and cat_id=?'
+  const arr = [attrname, attrvals, attrid, catid]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: '分类参数修改成功'
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '分类参数修改失败'
+      })
+    }
+  })
+})
+
+// 分类参数删除
+router.get('/deleteParamsById', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const attrid = a.searchParams.get('attr_id')
+  const sql = 'delete from cateparams where attr_id=?'
+  const arr = [attrid]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: '分类参数删除成功'
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '分类参数删除失败'
+      })
+    }
+  })
+})
 module.exports = router

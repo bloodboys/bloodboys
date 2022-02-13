@@ -222,6 +222,46 @@ const api = {
     return axios.get(base.baseUrl + base.deleteCateById, {
       params
     })
+  },
+  /**
+     * 分类参数列表
+     */
+  cateparams (params) {
+    return axios.get(base.baseUrl + base.cateparams, {
+      params
+    })
+  },
+  /**
+     * 添加分类参数
+     */
+  addcateparams (params) {
+    return axios.get(base.baseUrl + base.addcateparams, {
+      params
+    })
+  },
+  /**
+     * 分类参数预更新
+     */
+  preUpdateParams (params) {
+    return axios.get(base.baseUrl + base.preUpdateParams, {
+      params
+    })
+  },
+  /**
+     * 分类参数修改
+     */
+  updateParams (params) {
+    return axios.get(base.baseUrl + base.updateParams, {
+      params
+    })
+  },
+  /**
+     * 分类参数删除
+     */
+  deleteParamsById (params) {
+    return axios.get(base.baseUrl + base.deleteParamsById, {
+      params
+    })
   }
 }
 
