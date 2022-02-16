@@ -77,7 +77,7 @@
                     </el-form>
                     <span slot="footer" class="dialog-footer">
                 <el-button @click="editCateDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="eidtCate">确 定</el-button>
+                <el-button type="primary" @click="editCate">确 定</el-button>
               </span>
                 </el-dialog>
     </div>
@@ -318,7 +318,7 @@ export default {
     },
     // 显示编辑对话框
     async showEditCateDialog (cate) {
-      this.$api.preUpdateCate().then((res) => {
+      await this.$api.preUpdateCate().then((res) => {
         /* 赋值 */
         if (res.data.status === 200) {
           this.editCateForm = { cat_name: cate.cat_name, cat_id: cate.cat_id, cat_ppid: cate.cat_ppid }
@@ -335,7 +335,7 @@ export default {
       this.$refs.editCateFormRef.resetFields()
     },
     // 编辑分类名
-    eidtCate () {
+    editCate () {
       this.$refs.editCateFormRef.validate(async valid => {
         if (!valid) return Error()
         var catl = this.catelist
