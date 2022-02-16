@@ -262,6 +262,54 @@ const api = {
     return axios.get(base.baseUrl + base.deleteParamsById, {
       params
     })
+  },
+  /**
+     * 菜品列表
+     */
+  foods (params) {
+    return axios.get(base.baseUrl + base.foods, {
+      params
+    })
+  },
+  /**
+     * 菜品信息查询
+     */
+  foodsearch (params) {
+    return axios.get(base.baseUrl + base.foodSearch, {
+      params
+    })
+  },
+  /**
+     * 菜品删除
+     */
+  deleteFoodById (params) {
+    return axios.get(base.baseUrl + base.deleteFoodById, {
+      params
+    })
+  },
+  /**
+     * 添加菜品
+     */
+  addfood (params) {
+    return axios.get(base.baseUrl + base.addfood, {
+      params
+    })
+  },
+  /**
+     * 菜品修改
+     */
+  updatefood (params) {
+    return axios.get(base.baseUrl + base.updatefood, {
+      params
+    })
+  },
+  /**
+     * 编辑菜品预更新
+     */
+  preUpdatefood (params) {
+    return axios.get(base.baseUrl + base.preUpdatefood, {
+      params
+    })
   }
 }
 

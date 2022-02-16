@@ -32,7 +32,13 @@ const base = {
   addcateparams: '/api/addcateparams', // 添加分类参数
   preUpdateParams: '/api/preUpdateParams', // 分类参数预更新
   updateParams: '/api/updateParams', // 分类参数修改
-  deleteParamsById: '/api/deleteParamsById' // 分类参数删除
+  deleteParamsById: '/api/deleteParamsById', // 分类参数删除
+  foods: '/api/foods', // 菜品列表,
+  foodSearch: '/api/foodsearch', // 菜品信息查询
+  deleteFoodById: '/api/deleteFoodById', // 菜品删除
+  addfood: '/api/addfood', // 添加菜品
+  preUpdatefood: '/api/preUpdatefood', // 编辑菜品预更新
+  updatefood: '/api/updatefood' // 菜品修改
 }
 
 export default base

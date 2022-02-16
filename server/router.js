@@ -3,6 +3,8 @@ const router = express.Router()
 const sqlClient = require('./config')
 const jwt = require('jsonwebtoken')
 // const url = require('url')
+const fs = require('fs')
+const multer = require('multer')
 
 // 登录
 router.post('/login', (req, res) => {
@@ -37,8 +39,7 @@ router.post('/login', (req, res) => {
 router.get('/usersearch', (req, res) => {
   const a = new URL(req.url, 'http://localhost:3000')
   const search = a.searchParams.get('search')
-  const sql = "select * from user where concat(`username`,`mobile`,`email`,`mg_state`,`role_name`) like '%" +
-        search + "%'"
+  const sql = "select * from user where concat(`username`,`mobile`,`email`,`mg_state`,`role_name`) like '%" + search + "%'"
   sqlClient(sql, null, result => {
     if (result.length > 0) {
       res.send({
@@ -620,6 +621,176 @@ router.get('/deleteParamsById', (req, res) => {
       res.send({
         status: 500,
         msg: '分类参数删除失败'
+      })
+    }
+  })
+})
+
+// 菜品列表
+router.get('/foods', (req, res) => {
+  const sql = 'select * from food where foods_id '
+  sqlClient(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+      })
+    } else {
+      res.send({
+        status: 401,
+        msg: '获取菜品列表失败'
+      })
+    }
+  })
+})
+
+//  菜品信息查询
+router.get('/foodsearch', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const search = a.searchParams.get('search')
+  const sql = "select * from food where concat(`foods_name`,`foods_price`,`foods_weight`) like '%" + search + "%'"
+  sqlClient(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '暂无数据'
+      })
+    }
+  })
+})
+
+// 菜品删除
+router.get('/deleteFoodById', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const foodsid = a.searchParams.get('foods_id')
+  const sql = 'delete from food where foods_id=?'
+  const arr = [foodsid]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: '删除菜品成功'
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '删除菜品失败'
+      })
+    }
+  })
+})
+
+/**
+ * 上传图片
+ */
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './upload/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname)
+  }
+})
+
+var createFolder = function (folder) {
+  try {
+    fs.accessSync(folder)
+  } catch (e) {
+    fs.mkdirSync(folder)
+  }
+}
+
+var uploadFolder = './upload/'
+createFolder(uploadFolder)
+var upload = multer({ storage: storage })
+
+router.post('/upload', upload.single('file'), function (req, res, next) {
+  var file = req.file
+  console.log('文件类型：%s', file.mimetype)
+  console.log('原始文件名：%s', file.originalname)
+  console.log('文件大小：%s', file.size)
+  console.log('文件保存路径：%s', file.path)
+  res.json({ res_code: '0', name: file.originalname, url: file.path })
+})
+
+// 添加菜品
+router.get('/addfood', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const foodsname = a.searchParams.get('foods_name')
+  const foodsprice = a.searchParams.get('foods_price')
+  const catid = a.searchParams.get('cat_id')
+  const foodsnumber = a.searchParams.get('foods_number')
+  const foodsweight = a.searchParams.get('foods_weight')
+  const foodsintroduce = a.searchParams.get('foods_introduce')
+  const pics = a.searchParams.get('pics')
+  const attrs = a.searchParams.get('attrs')
+  const sql = 'insert into food values (null,?,?,?,?,?,?,null,null,null,null,0,?,?)'
+  const arr = [foodsname, foodsprice, catid, foodsnumber, foodsweight, foodsintroduce, pics, attrs]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: '添加菜品成功'
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '添加菜品失败'
+      })
+    }
+  })
+})
+
+// 菜品修改
+router.get('/updatefood', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const foodsid = a.searchParams.get('foods_id')
+  const foodsname = a.searchParams.get('foods_name')
+  const foodsprice = a.searchParams.get('foods_price')
+  const catid = a.searchParams.get('cat_id')
+  const foodsnumber = a.searchParams.get('foods_number')
+  const foodsintroduce = a.searchParams.get('foods_introduce')
+  const pics = a.searchParams.get('pics')
+  const attrs = a.searchParams.get('attrs')
+  const sql = 'update food set foods_name=?,foods_price=?,cat_id=?,foods_number=?,foods_introduce=?,pics=?,attrs=? where foods_id=?'
+  const arr = [foodsname, foodsprice, catid, foodsnumber, foodsintroduce, pics, attrs, foodsid]
+  sqlClient(sql, arr, result => {
+    if (result.affectedRows > 0) {
+      res.send({
+        status: 200,
+        msg: '修改菜品成功'
+
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '修改菜品失败'
+      })
+    }
+  })
+})
+
+// 菜品编辑预更新
+router.get('/preUpdatefood', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const foodsid = a.searchParams.get('foods_id')
+  const sql = 'select * from food where foods_id=?'
+  sqlClient(sql, [foodsid], result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '菜品预更新失败'
       })
     }
   })

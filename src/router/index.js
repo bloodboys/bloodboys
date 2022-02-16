@@ -8,6 +8,8 @@ import Rights from '../components/power/Rights.vue'
 import Roles from '../components/power/Roles.vue'
 import Cate from '../components/foods/Cate.vue'
 import Params from '../components/foods/Params.vue'
+import List from '../components/foods/List.vue'
+import Add from '../components/foods/Add.vue'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -46,6 +48,14 @@ const routes = [{
   {
     path: '/classparam',
     component: Params
+  },
+  {
+    path: '/foodlist',
+    component: List
+  },
+  {
+    path: '/foodlist/add',
+    component: Add
   }
   ]
 
