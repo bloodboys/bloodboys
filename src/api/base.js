@@ -40,6 +40,7 @@ const base = {
   preUpdatefood: '/api/preUpdatefood', // 编辑菜品预更新
   updatefood: '/api/updatefood', // 菜品修改
   order: '/api/order', // 订单列表
-  ordersearch: '/api/ordersearch' // 订单查询
+  ordersearch: '/api/ordersearch', // 订单查询
+  report: '/api/report' // 数据报表
 }
 export default base

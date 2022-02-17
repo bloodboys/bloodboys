@@ -326,6 +326,14 @@ const api = {
     return axios.get(base.baseUrl + base.ordersearch, {
       params
     })
+  },
+  /**
+     * 数据报表
+     */
+  report (params) {
+    return axios.get(base.baseUrl + base.report, {
+      params
+    })
   }
 }
 
