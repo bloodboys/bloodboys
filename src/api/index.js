@@ -310,6 +310,22 @@ const api = {
     return axios.get(base.baseUrl + base.preUpdatefood, {
       params
     })
+  },
+  /**
+     * 订单列表
+     */
+  order (params) {
+    return axios.get(base.baseUrl + base.order, {
+      params
+    })
+  },
+  /**
+     * 订单查询
+     */
+  ordersearch (params) {
+    return axios.get(base.baseUrl + base.ordersearch, {
+      params
+    })
   }
 }
 

@@ -288,7 +288,8 @@ export default {
           cat_id: form.foods_cat,
           attrs: JSON.stringify(form.attrs),
           pics: JSON.stringify(form.pics),
-          foods_introduce: form.foods_introduce
+          foods_introduce: form.foods_introduce,
+          add_time: Math.round(new Date() / 1000)
         }).then((res) => {
           if (res.data.status !== 200) {
             return this.$message.error('添加菜品失败！')

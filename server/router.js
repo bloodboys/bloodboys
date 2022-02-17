@@ -728,10 +728,12 @@ router.get('/addfood', (req, res) => {
   const foodsnumber = a.searchParams.get('foods_number')
   const foodsweight = a.searchParams.get('foods_weight')
   const foodsintroduce = a.searchParams.get('foods_introduce')
+  const addtime = a.searchParams.get('add_time')
+  const updtime = a.searchParams.get('upd_time')
   const pics = a.searchParams.get('pics')
   const attrs = a.searchParams.get('attrs')
-  const sql = 'insert into food values (null,?,?,?,?,?,?,null,null,null,null,0,?,?)'
-  const arr = [foodsname, foodsprice, catid, foodsnumber, foodsweight, foodsintroduce, pics, attrs]
+  const sql = 'insert into food values (null,?,?,?,?,?,?,null,?,?,null,0,?,?)'
+  const arr = [foodsname, foodsprice, catid, foodsnumber, foodsweight, foodsintroduce, addtime, updtime, pics, attrs]
   sqlClient(sql, arr, result => {
     if (result.affectedRows > 0) {
       res.send({
@@ -756,16 +758,16 @@ router.get('/updatefood', (req, res) => {
   const catid = a.searchParams.get('cat_id')
   const foodsnumber = a.searchParams.get('foods_number')
   const foodsintroduce = a.searchParams.get('foods_introduce')
+  const updtime = a.searchParams.get('upd_time')
   const pics = a.searchParams.get('pics')
   const attrs = a.searchParams.get('attrs')
-  const sql = 'update food set foods_name=?,foods_price=?,cat_id=?,foods_number=?,foods_introduce=?,pics=?,attrs=? where foods_id=?'
-  const arr = [foodsname, foodsprice, catid, foodsnumber, foodsintroduce, pics, attrs, foodsid]
+  const sql = 'update food set foods_name=?,foods_price=?,cat_id=?,foods_number=?,foods_introduce=?,upd_time=?,pics=?,attrs=? where foods_id=?'
+  const arr = [foodsname, foodsprice, catid, foodsnumber, foodsintroduce, updtime, pics, attrs, foodsid]
   sqlClient(sql, arr, result => {
     if (result.affectedRows > 0) {
       res.send({
         status: 200,
         msg: '修改菜品成功'
-
       })
     } else {
       res.send({
@@ -791,6 +793,46 @@ router.get('/preUpdatefood', (req, res) => {
       res.send({
         status: 500,
         msg: '菜品预更新失败'
+      })
+    }
+  })
+})
+
+// 订单列表
+router.get('/order', (req, res) => {
+  const sql = 'select * from orders where order_id'
+  sqlClient(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+      })
+    } else {
+      res.send({
+        status: 401,
+        msg: '获取订单列表失败'
+      })
+    }
+  })
+})
+
+//  订单查询
+
+router.get('/ordersearch', (req, res) => {
+  const a = new URL(req.url, 'http://localhost:3000')
+  const search = a.searchParams.get('search')
+  const sql = "select * from orders where concat(`order_number`) like '%" + search + "%'"
+  sqlClient(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+
+      })
+    } else {
+      res.send({
+        status: 500,
+        msg: '暂无数据'
       })
     }
   })
