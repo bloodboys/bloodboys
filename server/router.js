@@ -837,4 +837,22 @@ router.get('/ordersearch', (req, res) => {
     }
   })
 })
+
+// 数据报表
+router.get('/report', (req, res) => {
+  const sql = 'select * from report where id '
+  sqlClient(sql, null, result => {
+    if (result.length > 0) {
+      res.send({
+        status: 200,
+        result
+      })
+    } else {
+      res.send({
+        status: 401,
+        msg: '获取数据报表失败'
+      })
+    }
+  })
+})
 module.exports = router
